@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Outils | Libert_Toi_AutoDi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap:20px; padding:20px; }
+.card { background:white; padding:25px; border-radius:15px; box-shadow:0 10px 25px rgba(0,0,0,0.08);}
+.btn { display:inline-block; padding:12px 20px; color:white; text-decoration:none; border-radius:6px; cursor:pointer;}
+.btn.download { background:#28a745;}
+.btn.whatsapp { background:#25d366;}
+.btn.disabled { background:#6c757d; cursor:not-allowed;}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+    <h1>Outils à télécharger</h1>
+</header>
+
+<nav class="navbar">
+    <a href="index.html">Accueil</a>
+    <a href="formations.html">Formations</a>
+    <a href="outils.html">Outils</a>
+    <a href="espace-client.html">Espace Client</a>
+</nav>
+
+<main class="cards">
+  <!-- Outil gratuit -->
+  <div class="card">
+    <h3>📊 Excel – Gestion Gratuite</h3>
+    <p>Fichier Excel prêt à l’emploi.</p>
+    <a href="docs/excel.xlsx" download class="btn download">📥 Télécharger Gratuitement</a>
+  </div>
+
+  <!-- Outil payant -->
+  <div class="card">
+    <h3>📊 Excel – Gestion Avancée (Payant)</h3>
+    <p>Fichier complet pour usage professionnel.</p>
+    <button class="btn whatsapp" onclick="commander('Excel – Gestion Avancée')">💬 Commander via WhatsApp</button>
+    <a id="link-excel" href="#" class="btn download disabled">📥 Télécharger</a>
+  </div>
+</main>
+
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbwSOLzqrkHOrtznQS4pOPuh0h2NeCBQiaT5cP3W6eUhXc7WZkZg-xdRcwRHqJ3SMG8/exec"; // Remplace par ton Apps Script
+
+async function commander(outil){
+    const nom = prompt("Votre nom complet :");
+    if(!nom) return alert("Nom requis");
+    const email = prompt("Votre email :");
+    if(!email) return alert("Email requis");
+    const whatsapp = prompt("Votre numéro WhatsApp :");
+    if(!whatsapp) return alert("WhatsApp requis");
+
+    try {
+        // Crée la commande et récupère le code
+        const res = await fetch(`${ENDPOINT}?action=creer&outil=${encodeURIComponent(outil)}&nom=${encodeURIComponent(nom)}&email=${encodeURIComponent(email)}&whatsapp=${encodeURIComponent(whatsapp)}`);
+        const data = await res.json();
+
+        if(data.status !== "OK") return alert("Erreur création commande : " + (data.message || "Indéterminée"));
+
+        const code = data.code;
+
+        // Message WhatsApp pré-rempli
+        const message = `Bonjour,%0AJe souhaite commander:%0A- Outil: ${outil}%0A- Nom: ${nom}%0A- Email: ${email}%0A- Code: ${code}`;
+        window.open(`https://wa.me/22665219538?text=${message}`, "_blank");
+
+        alert(`Commande créée ✅\nVous recevrez un email dès que le lien de téléchargement sera renseigné.\nCode : ${code}`);
+    } catch(e) {
+        console.error(e);
+        alert("Erreur de communication avec le serveur.");
+    }
+}
+
+// Optionnel : vérification si le lien de téléchargement est activé pour ce client
+async function verifierLien(code, btnId){
+    try{
+        const res = await fetch(`${ENDPOINT}?action=verifier&code=${code}`);
+        const data = await res.json();
+        const btn = document.getElementById(btnId);
+        if(data.status === "OK"){
+            btn.href = data.lien;
+            btn.classList.remove("disabled");
+        }
+    }catch(e){ console.error(e); }
+}
+</script>
+
+</body>
+</html>
