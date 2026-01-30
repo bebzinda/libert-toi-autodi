@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Téléchargement | Libert_Toi_AutoDi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body { font-family: Arial, sans-serif; padding: 20px; background: #f8f9fa; }
+.container { max-width: 500px; margin: auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+h1 { text-align: center; margin-bottom: 20px; }
+#downloadBtn { display: block; width: 100%; padding: 12px; font-size: 16px; border: none; border-radius: 6px; background: #28a745; color: white; cursor: pointer; }
+#downloadBtn.disabled { background: #6c757d; cursor: not-allowed; }
+#message { margin-top: 15px; text-align: center; font-weight: bold; }
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Accès au téléchargement</h1>
+<p>Entrez votre code pour accéder à votre outil :</p>
+<input type="text" id="codeInput" placeholder="Code de téléchargement" style="width:100%;padding:10px;margin-bottom:10px;border-radius:5px;border:1px solid #ccc;">
+<button id="downloadBtn" class="disabled" disabled>⬇️ Télécharger</button>
+<p id="message"></p>
+</div>
+
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbz85MPgrugUngjxaFeNhWl3vMM27qBKSJyZsUrF1g9YRVQGxO7Lvg3Fj3zSG19N-A4/exec";
+
+const codeInput = document.getElementById("codeInput");
+const downloadBtn = document.getElementById("downloadBtn");
+const messageEl = document.getElementById("message");
+
+let downloadLink = "";
+
+codeInput.addEventListener("input", async () => {
+    const code = codeInput.value.trim();
+    if(code.length === 0) {
+        downloadBtn.classList.add("disabled");
+        downloadBtn.disabled = true;
+        messageEl.textContent = "";
+        return;
+    }
+
+    try {
+        const res = await fetch(`${ENDPOINT}?action=verifier&code=${encodeURIComponent(code)}`);
+        const data = await res.json();
+
+        if(data.status === "OK") {
+            downloadLink = data.lien;
+            downloadBtn.classList.remove("disabled");
+            downloadBtn.disabled = false;
+            messageEl.textContent = `✅ Code valide ! Cliquez sur Télécharger pour obtenir votre outil : ${data.outil}`;
+        } else {
+            downloadBtn.classList.add("disabled");
+            downloadBtn.disabled = true;
+            messageEl.textContent = `❌ ${data.message}`;
+        }
+    } catch(e) {
+        messageEl.textContent = "Erreur de vérification du code.";
+        console.error(e);
+    }
+});
+
+downloadBtn.addEventListener("click", () => {
+    if(downloadLink) {
+        window.location.href = downloadLink;
+        downloadBtn.classList.add("disabled");
+        downloadBtn.disabled = true;
+        messageEl.textContent = "✅ Téléchargement en cours...";
+    }
+});
+</script>
+
+</body>
+</html>
