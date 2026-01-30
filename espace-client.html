@@ -152,10 +152,10 @@ tr:nth-child(even) { background: #f4f4f4; }
 </a>
 
 <script>
-const endpoint = "https://script.google.com/macros/s/AKfycbytpLg-kqc6JG--w6N67OQcIADXtADHrH8BcVyVQT9xfdaVAR0wuwCyvZXurg3tfBg/exec";
+const endpoint = "https://script.google.com/macros/s/AKfycbxqngNcSXsl-QndWZnUt19_XPBlv_9iF28g9AAizJ6slhsmMj6uI6mBgxRRByAx_So/exec";
 const whatsappNumber = "22665219538";
 
-const tbody = document.querySelector("#clientTable tbody");
+const tbody = document.querySelector("#clientInfo");
 const idInput = document.querySelector("#idInput");
 const searchBtn = document.querySelector("#searchBtn");
 const loading = document.querySelector("#loading");
@@ -163,22 +163,25 @@ const whatsappBtn = document.querySelector("#whatsappBtn");
 
 let currentClientName = "";
 let currentClientId = "";
+let currentStatut = "";
 
-function getStatusColor(status) {
-  switch ((status || "").toLowerCase()) {
-    case "en attente": return "#f0ad4e";
-    case "en cours": return "#fd7e14";
-    case "terminé": return "#5cb85c";
-    case "actif": return "#5cb85c";
-    case "utilisé": return "#6c757d";
-    default: return "#6c757d";
-  }
+/* ===== COULEUR STATUT ===== */
+function getStatusBadge(statut) {
+  statut = (statut || "").toUpperCase();
+
+  let color = "#6c757d"; // gris par défaut
+  if (statut === "EN ATTENTE") color = "#f0ad4e";
+  if (statut === "EN COURS") color = "#0d6efd";
+  if (statut === "TERMINÉ") color = "#5cb85c";
+
+  return `<span class="badge" style="background:${color}">${statut}</span>`;
 }
 
-async function loadClients(id) {
-  tbody.innerHTML = "";
+/* ===== CHARGEMENT CLIENT ===== */
+async function loadClientById(id) {
   if (!id) return;
 
+  tbody.innerHTML = "";
   loading.style.display = "inline";
   currentClientId = id;
 
@@ -186,95 +189,68 @@ async function loadClients(id) {
     const res = await fetch(`${endpoint}?id=${encodeURIComponent(id)}`);
     const data = await res.json();
 
-    if (data.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="7">Aucune donnée trouvée pour cet ID.</td></tr>`;
-    } else {
-      data.forEach(client => {
-        currentClientName = client['Nom & Prénom'] || "Client";
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${client['Adresse e-mail'] || ''}</td>
-          <td>${client['Nom & Prénom'] || ''}</td>
-          <td>${client['Numéro WhatsApp'] || ''}</td>
-          <td>${client['Dépôt de fichier'] || ''}</td>
-          <td>${client['Expliquez-nous le travail attendu'] || ''}</td>
-          <td style="background:${getStatusColor(client.statut)};color:white;font-weight:bold;text-align:center;">
-            ${client.statut || "Attente"}
-          </td>
-          <td>${client.lien ? `<a href="${client.lien}" target="_blank">Voir</a>` : ""}</td>
-        `;
-        tbody.appendChild(tr);
-      });
+    if (!data.length) {
+      tbody.innerHTML =
+        `<tr><td colspan="7">❌ Aucun dossier trouvé pour cet ID.</td></tr>`;
+      return;
     }
 
-    idInput.value = "••••••";
+    data.forEach(client => {
+      currentClientName = client["Nom & Prénom"] || "Client";
+      currentStatut = client.statut || "EN ATTENTE";
+
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${client["Adresse e-mail"] || ""}</td>
+        <td>${client["Nom & Prénom"] || ""}</td>
+        <td>${client["Numéro WhatsApp"] || ""}</td>
+        <td>${client["Dépôt de fichier"] || ""}</td>
+        <td>${client["Expliquez-nous le travail attendu"] || ""}</td>
+        <td style="text-align:center">
+          ${getStatusBadge(currentStatut)}
+        </td>
+        <td>
+          ${client.lien ? `<a href="${client.lien}" target="_blank">🔗 Voir</a>` : ""}
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
     updateWhatsAppLink();
 
-    // Charger les outils
-    if (data[0] && data[0]['Adresse e-mail']) {
-      loadToolsByEmail(data[0]['Adresse e-mail']);
-    }
-
-  } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="7">Erreur de chargement.</td></tr>`;
-    console.error(e);
+  } catch (err) {
+    console.error(err);
+    tbody.innerHTML =
+      `<tr><td colspan="7">⚠️ Erreur de chargement.</td></tr>`;
+  } finally {
+    loading.style.display = "none";
+    idInput.value = "••••••";
   }
-
-  loading.style.display = "none";
 }
 
+/* ===== WHATSAPP ===== */
 function updateWhatsAppLink() {
-  const message = `Bonjour Libert_Toi_AutoDi,%0AJe suis ${currentClientName}.%0AMon ID client est : ${currentClientId}.%0AJe souhaite échanger concernant mon dossier.`;
-  whatsappBtn.href = `https://wa.me/${whatsappNumber}?text=${message}`;
+  const message =
+`Bonjour Libert_Toi_AutoDi,
+Je suis ${currentClientName}.
+ID client : ${currentClientId}.
+Statut de mon dossier : ${currentStatut}.
+Je souhaite avoir plus d'informations.`;
+
+  whatsappBtn.href =
+    `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
 }
 
+/* ===== EVENTS ===== */
 searchBtn.addEventListener("click", () => {
-  loadClients(idInput.value.trim());
+  loadClientById(idInput.value.trim());
 });
-
-function getIdFromUrl() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get("id");
-}
 
 window.addEventListener("load", () => {
-  const idFromUrl = getIdFromUrl();
-  if (idFromUrl) loadClients(idFromUrl);
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+  if (id) loadClientById(id);
 });
-
-async function loadToolsByEmail(email) {
-  const res = await fetch(`${endpoint}?action=tools&email=${encodeURIComponent(email)}`);
-  const data = await res.json();
-
-  const toolsTable = document.getElementById("toolsTable");
-  toolsTable.innerHTML = "";
-
-  if (!data.length) {
-    toolsTable.innerHTML = `<tr><td colspan="3">Aucun outil disponible</td></tr>`;
-    return;
-  }
-
-  data.forEach(t => {
-    let action = "";
-    if (t.statut === "ACTIF") {
-      action = `<a class="btn download blink"
-         href="telechargement.html?code=${t.code}">
-         ⬇️ Télécharger
-       </a>`;
-    } else {
-      action = "✔️ Déjà téléchargé";
-    }
-
-    toolsTable.innerHTML += `
-      <tr>
-        <td>${t.outil}</td>
-        <td>${t.statut}</td>
-        <td>${action}</td>
-      </tr>
-    `;
-  });
-}
 </script>
 
 </body>
