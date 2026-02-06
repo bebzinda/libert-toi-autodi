@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Outils | Libert_Toi_AutoDi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #f5f7fa;
+  color: #333;
+}
+header {
+  background: linear-gradient(135deg, #198754, #28a745);
+  color: white;
+  padding: 45px 20px;
+  text-align: center;
+}
+header h1 { font-size: 2rem; }
+nav {
+  background: white;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+nav a { text-decoration: none; color: #198754; font-weight: bold; }
+nav a:hover { text-decoration: underline; }
+section { padding: 45px 20px; max-width: 1100px; margin: auto; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+  position: relative;
+}
+.card i { font-size: 40px; color: #198754; margin-bottom: 10px; display: block; }
+.actions { display: flex; gap: 10px; margin-top: 15px; }
+.actions a { flex: 1; text-align: center; padding: 10px; border-radius: 6px; text-decoration: none; font-weight: bold; }
+.btn-order { background: #198754; color: white; }
+.btn-order:hover { background: #146c43; }
+.btn-info { background: #e9ecef; color: #333; }
+.btn-info:hover { background: #dcdcdc; }
+.social { display: flex; gap: 15px; margin-top: 10px; align-items: center; font-size: 0.95rem; }
+.social span { cursor: pointer; display: flex; align-items: center; gap: 5px; }
+.comment-form { display: none; margin-top: 10px; }
+.comment-form input { width: 80%; padding: 8px; border-radius: 5px; border: 1px solid #ccc; }
+.comment-form button { padding: 8px 12px; border-radius: 5px; border: none; background: #198754; color: white; cursor: pointer; margin-left: 5px; }
+.comments-list { margin-top: 10px; max-height: 200px; overflow-y: auto; font-size: 0.9rem; }
+.comment-item { padding: 6px 8px; border-radius: 6px; background: #f0f0f0; margin-bottom: 5px; position: relative; }
+.comment-reactions { margin-top: 5px; display: flex; gap: 8px; font-size: 0.9rem; }
+.comment-reactions span { cursor: pointer; user-select: none; }
+footer { background: #222; color: #ccc; text-align: center; padding: 20px; margin-top: 40px; }
+.whatsapp {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25d366;
+  color: white;
+  padding: 14px 18px;
+  border-radius: 50px;
+  text-decoration: none;
+  font-weight: bold;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+.whatsapp:hover { background: #1ebe5d; }
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Nos Outils Numériques</h1>
+  <p>Téléchargez des outils pratiques pour gagner du temps</p>
+</header>
+
+<nav>
+  <a href="index.html">Accueil</a>
+  <a href="formations.html">Formations</a>
+  <a href="outils.html">Outils</a>
+  <a href="espace-client.html">Espace Client</a>
+</nav>
+
+<section>
+<h2>🧰 Outils disponibles</h2>
+
+<div class="cards">
+
+<!-- OUTIL 1 -->
+<div class="card">
+  <i class="fas fa-file-excel"></i>
+  <h3>Gestion des dépenses (Excel)</h3>
+  <p>Suivi automatique des dépenses quotidiennes.</p>
+
+  <div class="actions">
+    <a href="#" class="btn-order" onclick="commander('Gestion des dépenses Excel')">🛒 Commander</a>
+    <a class="btn-info" href="https://wa.me/22665219538?text=Je souhaite des infos sur l’outil Gestion des dépenses Excel" target="_blank">💬 Infos</a>
+  </div>
+
+  <div class="social">
+    <span class="like" onclick="likeOutil(this)">👍 <span class="like-count">0</span></span>
+    <span class="comment" onclick="toggleCommentForm(this)">💬 <span class="comment-count">0</span></span>
+    <span class="share" onclick="shareOutil('Gestion des dépenses Excel')">🔗 Partager</span>
+  </div>
+
+  <div class="comment-form">
+    <input type="text" class="comment-input" placeholder="Votre commentaire...">
+    <button onclick="submitComment(this)">Envoyer</button>
+    <div class="comments-list"></div>
+  </div>
+</div>
+
+<!-- OUTIL 2 -->
+<div class="card">
+  <i class="fas fa-chart-line"></i>
+  <h3>Suivi d’activité & rendement</h3>
+  <p>Analyse de performance et productivité.</p>
+
+  <div class="actions">
+    <a href="#" class="btn-order" onclick="commander('Suivi activité & rendement')">🛒 Commander</a>
+    <a class="btn-info" href="https://wa.me/22665219538?text=Je souhaite des infos sur l’outil Suivi activité" target="_blank">💬 Infos</a>
+  </div>
+
+  <div class="social">
+    <span class="like" onclick="likeOutil(this)">👍 <span class="like-count">0</span></span>
+    <span class="comment" onclick="toggleCommentForm(this)">💬 <span class="comment-count">0</span></span>
+    <span class="share" onclick="shareOutil('Suivi activité & rendement')">🔗 Partager</span>
+  </div>
+
+  <div class="comment-form">
+    <input type="text" class="comment-input" placeholder="Votre commentaire...">
+    <button onclick="submitComment(this)">Envoyer</button>
+    <div class="comments-list"></div>
+  </div>
+</div>
+
+</div>
+</section>
+
+<footer>
+<p>© 2026 Libert_Toi_AutoDi</p>
+</footer>
+
+<a class="whatsapp" href="https://wa.me/22665219538" target="_blank">💬 WhatsApp</a>
+
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbxKymOFmez4Oz6opGEPo909UWvkQh8EcVmKpB456FTuF64L3fIVSlBntz1a0ID78N0/exec";
+
+// ======= COMMANDE =========
+async function commander(outil) {
+  const nom = prompt("Votre nom complet :");
+  if (!nom) return;
+  const email = prompt("Votre email :");
+  if (!email) return;
+  const whatsapp = prompt("Votre numéro WhatsApp :");
+  if (!whatsapp) return;
+
+  try {
+    const res = await fetch(`${ENDPOINT}?action=creer&outil=${encodeURIComponent(outil)}&nom=${encodeURIComponent(nom)}&email=${encodeURIComponent(email)}&whatsapp=${encodeURIComponent(whatsapp)}`);
+    const data = await res.json();
+    if (data.status !== "OK") { alert("Erreur lors de la commande"); return; }
+
+    const msg = `Bonjour,%0ACommande outil : ${outil}%0ANom : ${nom}%0AEmail : ${email}%0ACode : ${data.code}`;
+    window.open(`https://wa.me/22665219538?text=${msg}`, "_blank");
+    alert("✅ Commande enregistrée\nUn email vous sera envoyé dès que l’outil sera prêt.");
+  } catch (e) { alert("Erreur de connexion au serveur."); }
+}
+
+// ======= COMMENTAIRES AVEC EMOJIS =========
+function toggleCommentForm(el) {
+  const card = el.closest(".card");
+  const form = card.querySelector(".comment-form");
+  form.style.display = form.style.display === "block" ? "none" : "block";
+}
+
+function submitComment(btn) {
+  const card = btn.closest(".card");
+  const input = card.querySelector(".comment-input");
+  const text = input.value.trim();
+  if (!text) return alert("Veuillez écrire un commentaire.");
+  
+  const list = card.querySelector(".comments-list");
+  const div = document.createElement("div");
+  div.className = "comment-item";
+  div.innerHTML = `${text}
+    <div class="comment-reactions">
+      <span onclick="reactEmoji(this,'❤️')">❤️ 0</span>
+      <span onclick="reactEmoji(this,'😂')">😂 0</span>
+      <span onclick="reactEmoji(this,'😮')">😮 0</span>
+      <span onclick="reactEmoji(this,'😢')">😢 0</span>
+      <span onclick="reactEmoji(this,'👍')">👍 0</span>
+    </div>`;
+  list.prepend(div);
+
+  const countEl = card.querySelector(".comment-count");
+  countEl.textContent = parseInt(countEl.textContent)+1;
+  input.value = "";
+}
+
+function reactEmoji(el, emoji) {
+  let parts = el.textContent.split(' ');
+  let count = parseInt(parts[1]) + 1;
+  el.textContent = emoji + ' ' + count;
+}
+
+// ======= LIKE =========
+function likeOutil(el) {
+  const countEl = el.querySelector(".like-count");
+  countEl.textContent = parseInt(countEl.textContent) + 1;
+}
+
+// ======= PARTAGE =========
+function shareOutil(outil) {
+  const url = encodeURIComponent(window.location.href);
+  const msg = encodeURIComponent(`Découvrez l'outil "${outil}" sur Libert_Toi_AutoDi: ${url}`);
+  window.open(`https://wa.me/22665219538?text=${msg}`, "_blank");
+}
+</script>
+
+</body>
+</html>
