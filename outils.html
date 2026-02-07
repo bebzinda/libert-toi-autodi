@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Libert_Toi_AutoDi | Outils</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- FAVICON + PWA -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/logo.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#1e90ff">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body { margin:0; font-family:'Segoe UI', Arial, sans-serif; background:#f5f7fa; color:#333; }
+
+    /* ===== Bandeau offline ===== */
+    #offline-banner {
+      display:none;
+      position:fixed;
+      top:-50px;
+      left:0;
+      width:100%;
+      background:#ff4d4f;
+      color:white;
+      text-align:center;
+      padding:12px 0;
+      font-weight:bold;
+      z-index:9999;
+      transition: top 0.5s ease;
+    }
+    #offline-banner.show { top:0; }
+
+    /* ===== Header ===== */
+    header {
+      background: linear-gradient(135deg, #1e90ff, #0b5ed7);
+      color:white; padding:40px 20px; text-align:center;
+      overflow:hidden;
+    }
+    header img { height:70px; margin-bottom:10px; opacity:0; transform: translateY(-50px); animation: slideDownFade 1s forwards; }
+    header h1 { font-size:2.2rem; margin:10px 0; opacity:0; transform: translateY(-50px); animation: slideDownFade 1s 0.3s forwards; }
+    header p { font-size:1.1rem; opacity:0; transform: translateY(-50px); animation: slideDownFade 1s 0.6s forwards; }
+
+    @keyframes slideDownFade {
+      0% { opacity:0; transform: translateY(-50px); }
+      100% { opacity:1; transform: translateY(0); }
+    }
+
+    /* ===== Navigation ===== */
+    nav {
+      background:#fff; display:flex; justify-content:center; gap:20px;
+      padding:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+    nav a { text-decoration:none; color:#1e90ff; font-weight:bold; }
+    nav a:hover { text-decoration:underline; }
+
+    /* ===== Sections ===== */
+    section { padding:50px 20px; max-width:1100px; margin:auto; }
+
+    .cards {
+      display:grid;
+      grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+      gap:25px;
+    }
+
+    .card {
+      background:white; padding:25px; border-radius:12px;
+      box-shadow:0 10px 25px rgba(0,0,0,0.08); text-align:center;
+      opacity:0; transform: translateY(30px);
+      transition: transform 0.6s ease, opacity 0.6s ease, box-shadow 0.3s;
+    }
+    .card.show { opacity:1; transform: translateY(0); }
+    .card:hover { transform: translateY(-10px) scale(1.03); box-shadow:0 15px 30px rgba(0,0,0,0.2); }
+
+    .card i {
+      font-size:42px; color:#1e90ff; margin-bottom:15px;
+      transition: transform 0.3s;
+    }
+    .card i:hover { transform: rotate(12deg) scale(1.2); }
+
+    .actions {
+      margin-top:15px;
+      display:flex;
+      gap:10px;
+      justify-content:center;
+    }
+
+    .btn {
+      padding:10px 16px;
+      border-radius:6px;
+      text-decoration:none;
+      font-weight:bold;
+      transition: transform 0.3s;
+    }
+
+    .btn-order {
+      background:#1e90ff;
+      color:white;
+    }
+
+    .btn-info {
+      background:#e9ecef;
+      color:#333;
+    }
+
+    .btn:hover { transform: scale(1.05); }
+
+    footer { background:#222; color:#ccc; text-align:center; padding:20px; margin-top:40px; }
+
+    .whatsapp {
+      position:fixed; bottom:20px; right:20px; background:#25d366; color:white;
+      padding:14px 18px; border-radius:50px; text-decoration:none; font-weight:bold;
+      box-shadow:0 8px 20px rgba(0,0,0,0.3);
+      transition: transform 0.3s;
+    }
+    .whatsapp:hover { background:#1ebe5d; transform: scale(1.05); }
+  </style>
+</head>
+
+<body>
+
+<div id="offline-banner">⚠️ Veuillez activer votre connexion Internet pour certaines fonctionnalités</div>
+
+<header>
+  <a href="index.html"><img src="images/logo.png" alt="Libert_Toi_AutoDi"></a>
+  <h1>Nos Outils Numériques</h1>
+  <p>Des outils pratiques pour gagner du temps et être plus efficace</p>
+</header>
+
+<nav>
+  <a href="index.html">Accueil</a>
+  <a href="formations.html">Formations</a>
+  <a href="outils.html">Outils</a>
+  <a href="espace-client.html">Espace Client</a>
+</nav>
+
+<section>
+  <h2>🧰 Outils disponibles</h2>
+
+  <div class="cards">
+
+    <div class="card">
+      <i class="fas fa-file-excel"></i>
+      <h3>Gestion des dépenses (Excel)</h3>
+      <p>Suivi automatique des dépenses quotidiennes.</p>
+      <div class="actions">
+        <a class="btn btn-order" href="#">🛒 Commander</a>
+        <a class="btn btn-info" href="https://wa.me/22665219538" target="_blank">💬 Infos</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <i class="fas fa-chart-line"></i>
+      <h3>Suivi d’activité & rendement</h3>
+      <p>Analyse de performance et productivité.</p>
+      <div class="actions">
+        <a class="btn btn-order" href="#">🛒 Commander</a>
+        <a class="btn btn-info" href="https://wa.me/22665219538" target="_blank">💬 Infos</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <i class="fas fa-file-word"></i>
+      <h3>Modèle de rapport Word</h3>
+      <p>Rapport professionnel prêt à remplir.</p>
+      <div class="actions">
+        <a class="btn btn-order" href="#">🛒 Commander</a>
+        <a class="btn btn-info" href="https://wa.me/22665219538" target="_blank">💬 Infos</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 Libert_Toi_AutoDi</p>
+</footer>
+
+<a class="whatsapp" href="https://wa.me/22665219538" target="_blank">💬 WhatsApp</a>
+
+<script>
+// Bandeau offline
+const banner = document.getElementById("offline-banner");
+function updateOnlineStatus() {
+  if (!navigator.onLine) banner.classList.add("show");
+  else banner.classList.remove("show");
+}
+window.addEventListener("online", updateOnlineStatus);
+window.addEventListener("offline", updateOnlineStatus);
+updateOnlineStatus();
+
+// Animation cartes
+window.addEventListener("load", () => {
+  document.querySelectorAll(".card").forEach((card, i) => {
+    setTimeout(() => card.classList.add("show"), i * 200);
+  });
+});
+</script>
+
+</body>
+</html>

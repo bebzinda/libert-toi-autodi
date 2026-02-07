@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Formations | Libert_Toi_AutoDi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Favicon + Apple Icon -->
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/logo.png">
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body { margin:0; font-family:'Segoe UI', Arial, sans-serif; background:#f5f7fa; color:#333; }
+
+    /* ===== Bandeau offline ===== */
+    #offline-banner {
+      display:none;
+      position:fixed;
+      top:-50px;
+      left:0;
+      width:100%;
+      background:#ff4d4f;
+      color:white;
+      text-align:center;
+      padding:12px 0;
+      font-weight:bold;
+      z-index:9999;
+      transition: top 0.5s ease;
+    }
+    #offline-banner.show { top:0; }
+
+    /* ===== Header ===== */
+    header {
+      background: linear-gradient(135deg, #1e90ff, #0b5ed7);
+      color:white;
+      padding:40px 20px;
+      text-align:center;
+      overflow:hidden;
+    }
+    header img { height:70px; margin-bottom:10px; opacity:0; transform: translateY(-50px); animation: slideDownFade 1s forwards; }
+    header h1 { font-size:2.2rem; margin:10px 0; opacity:0; transform: translateY(-50px); animation: slideDownFade 1s 0.3s forwards; }
+    header p { font-size:1.1rem; opacity:0; transform: translateY(-50px); animation: slideDownFade 1s 0.6s forwards; }
+
+    @keyframes slideDownFade {
+      0% { opacity:0; transform: translateY(-50px); }
+      100% { opacity:1; transform: translateY(0); }
+    }
+
+    /* ===== Navigation ===== */
+    nav {
+      background:#fff;
+      display:flex;
+      justify-content:center;
+      gap:20px;
+      padding:12px;
+      box-shadow:0 2px 8px rgba(0,0,0,0.1);
+    }
+    nav a { text-decoration:none; color:#1e90ff; font-weight:bold; }
+    nav a:hover { text-decoration:underline; }
+
+    /* ===== Sections ===== */
+    section { padding:50px 20px; max-width:1100px; margin:auto; }
+    section h2 { text-align:center; color:#1e90ff; margin-bottom:35px; }
+
+    /* ===== Cartes ===== */
+    .cards { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:25px; }
+    .card {
+      background:white; padding:25px; border-radius:15px;
+      box-shadow:0 12px 30px rgba(0,0,0,0.08); text-align:left;
+      opacity:0; transform: translateY(30px); transition:.5s;
+    }
+    .card.show { opacity:1; transform: translateY(0); }
+    .card:hover { transform: translateY(-10px) scale(1.03); box-shadow:0 18px 40px rgba(0,0,0,0.2); }
+
+    .card i { font-size:40px; color:#1e90ff; margin-bottom:12px; transition:.3s; }
+    .card i:hover { transform: rotate(15deg) scale(1.2); }
+
+    .card a {
+      display:inline-block; margin-top:15px; padding:10px 20px;
+      background:#1e90ff; color:white; border-radius:6px; text-decoration:none; transition:.3s;
+    }
+    .card a:hover { background:#0b78e3; transform:scale(1.05); }
+
+    /* ===== CTA ===== */
+    .cta { background:#1e90ff; color:white; text-align:center; padding:40px 20px; border-radius:15px; margin-top:40px; }
+    .cta a { background:white; color:#1e90ff; padding:12px 25px; border-radius:30px; text-decoration:none; font-weight:bold; transition:.3s; }
+    .cta a:hover { transform:scale(1.1); box-shadow:0 8px 20px rgba(0,0,0,0.3); }
+
+    /* ===== Footer ===== */
+    footer { background:#222; color:#ccc; text-align:center; padding:20px; margin-top:40px; }
+
+    /* ===== WhatsApp flottant ===== */
+    .whatsapp {
+      position:fixed; bottom:20px; right:20px; background:#25d366; color:white;
+      padding:14px 18px; border-radius:50px; text-decoration:none; font-weight:bold;
+      box-shadow:0 8px 20px rgba(0,0,0,0.3); transition:.3s;
+    }
+    .whatsapp:hover { background:#1ebe5d; transform:scale(1.05); }
+  </style>
+</head>
+
+<body>
+
+<!-- Bandeau offline -->
+<div id="offline-banner">⚠️ Veuillez activer votre connexion Internet pour certaines fonctionnalités</div>
+
+<header>
+  <a href="index.html"><img src="images/logo.png" alt="Libert_Toi_AutoDi"></a>
+  <h1>Nos Formations</h1>
+  <p>Des formations pratiques et accessibles pour maîtriser les outils numériques</p>
+</header>
+
+<nav>
+  <a href="index.html">Accueil</a>
+  <a href="outils.html">Outils</a>
+  <a href="espace-client.html">Espace Client</a>
+</nav>
+
+<section>
+  <h2>🎓 Formations disponibles</h2>
+
+  <div class="cards">
+
+    <div class="card">
+      <i class="fas fa-file-excel"></i>
+      <h3>Excel Pratique</h3>
+      <ul>
+        <li>Débutant à avancé</li>
+        <li>Formules essentielles</li>
+        <li>Tableaux automatiques</li>
+        <li>Gestion de projets et activités</li>
+      </ul>
+      <a href="https://wa.me/22665219538?text=Je souhaite m'inscrire à la formation Excel" target="_blank">
+        📲 S’inscrire
+      </a>
+    </div>
+
+    <div class="card">
+      <i class="fas fa-laptop-code"></i>
+      <h3>Informatique Générale</h3>
+      <ul>
+        <li>Ordinateur & smartphone</li>
+        <li>Internet & e-mail</li>
+        <li>Sécurité numérique</li>
+      </ul>
+      <a href="https://wa.me/22665219538?text=Je souhaite m'inscrire à la formation Informatique générale" target="_blank">
+        📲 S’inscrire
+      </a>
+    </div>
+
+    <div class="card">
+      <i class="fas fa-chart-line"></i>
+      <h3>Entrepreneurs</h3>
+      <ul>
+        <li>Gestion clients</li>
+        <li>Suivi des dépenses</li>
+        <li>Organisation du travail</li>
+      </ul>
+      <a href="https://wa.me/22665219538?text=Je souhaite une formation entrepreneur" target="_blank">
+        📲 S’inscrire
+      </a>
+    </div>
+
+  </div>
+</section>
+
+<section class="cta">
+  <h2>📞 Formation sur mesure ?</h2>
+  <a href="https://wa.me/22665219538" target="_blank">Nous contacter</a>
+</section>
+
+<footer>
+  <p>© 2026 Libert_Toi_AutoDi</p>
+</footer>
+
+<a class="whatsapp" href="https://wa.me/22665219538" target="_blank">💬 WhatsApp</a>
+
+<script>
+  // Service Worker & Offline Banner
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", ()=>{
+      navigator.serviceWorker.register("service-worker.js").then(()=>console.log("SW enregistré")).catch(err=>console.log(err));
+    });
+  }
+  const banner = document.getElementById("offline-banner");
+  function updateOnlineStatus() {
+    if (!navigator.onLine) banner.classList.add("show");
+    else banner.classList.remove("show");
+  }
+  window.addEventListener("online", updateOnlineStatus);
+  window.addEventListener("offline", updateOnlineStatus);
+  updateOnlineStatus();
+
+  // Animation cartes en cascade
+  window.addEventListener("load", ()=>{
+    document.querySelectorAll(".card").forEach((card,i)=>{
+      setTimeout(()=>card.classList.add("show"), i*200);
+    });
+  });
+</script>
+
+</body>
+</html>
