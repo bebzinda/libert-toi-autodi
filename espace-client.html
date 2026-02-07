@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="images/logo.png">
+<meta charset="UTF-8">
+<title>Espace Client | Libert_Toi_AutoDi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f6f8fa;
+}
+
+.table-container { overflow-x: auto; width: 100%; margin-top: 20px; }
+
+table {
+  min-width: 900px;
+  border-collapse: collapse;
+  width: 100%;
+  background: white;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: left;
+}
+
+th {
+  background: #1e90ff;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+
+.btn-primary {
+  display: inline-block;
+  padding: 12px 20px;
+  background: #1e90ff;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-bottom: 15px;
+}
+
+#idInput {
+  padding: 10px;
+  width: 260px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#searchBtn {
+  padding: 10px 18px;
+  border-radius: 6px;
+  border: none;
+  background: #1e90ff;
+  color: white;
+  cursor: pointer;
+}
+
+#searchBtn:hover {
+  background: #0b78e3;
+}
+
+#loading {
+  display: none;
+  margin-left: 10px;
+  font-style: italic;
+}
+
+/* Bouton téléchargement */
+.download-btn {
+  display: inline-block;
+  padding: 10px 15px;
+  background: #198754;
+  color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.download-btn.wait {
+  background: #ffc107;
+  color: #333;
+  cursor: default;
+}
+
+.blink {
+  animation: blinker 1s linear infinite;
+}
+
+@keyframes blinker {
+  50% { opacity: 0.5; }
+}
+
+/* WhatsApp flottant */
+.whatsapp-float {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  background: #25d366;
+  color: white;
+  border-radius: 50px;
+  padding: 14px 20px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+  z-index: 999;
+}
+</style>
+<link rel="icon" type="image/png" href="./images/logo.png">
+<link rel="apple-touch-icon" href="./images/logo.png">
+</head>
+
+<body>
+
+<header class="site-header">
+  <h1>Espace Client</h1>
+  <p>Suivez vos fichiers et l’avancement de vos travaux</p>
+</header>
+
+<nav class="navbar">
+  <a href="index.html">Accueil</a>
+  <a href="formations.html">Formations</a>
+  <a href="outils.html">Outils</a>
+</nav>
+
+<main>
+<p>
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSepncg1m0RuqcmdturorHndSvCw12o9JmwFRxHvU8h4gf77GQ/viewform"
+     target="_blank"
+     class="btn-primary">
+     📤 Déposer un fichier
+  </a>
+</p>
+
+<p>
+  <input type="text" id="idInput" placeholder="Entrez votre ID client">
+  <button id="searchBtn">Rechercher</button>
+  <span id="loading">Chargement...</span>
+</p>
+
+<div class="table-container">
+<table>
+  <thead>
+    <tr>
+      <th>Email</th>
+      <th>Nom & Prénom</th>
+      <th>WhatsApp</th>
+      <th>Fichier</th>
+      <th>Description</th>
+      <th>Statut</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody id="clientInfo"></tbody>
+</table>
+</div>
+</main>
+
+<footer class="site-footer">
+  <p>Libert_Toi_AutoDi – Espace Client</p>
+</footer>
+
+<a id="whatsappBtn" class="whatsapp-float" href="#" target="_blank">
+  💬 WhatsApp
+</a>
+
+<script>
+const endpoint = "https://script.google.com/macros/s/AKfycbxKymOFmez4Oz6opGEPo909UWvkQh8EcVmKpB456FTuF64L3fIVSlBntz1a0ID78N0/exec";
+const whatsappNumber = "22665219538";
+
+const tbody = document.querySelector("#clientInfo");
+const idInput = document.querySelector("#idInput");
+const searchBtn = document.querySelector("#searchBtn");
+const loading = document.querySelector("#loading");
+const whatsappBtn = document.querySelector("#whatsappBtn");
+
+let currentClientName = "";
+let currentClientId = "";
+let currentStatut = "";
+
+function getStatusBadge(statut) {
+  statut = (statut || "").toUpperCase();
+  let color = "#6c757d";
+  if (statut === "EN ATTENTE") color = "#ffc107";
+  if (statut === "EN COURS") color = "#0d6efd";
+  if (statut === "TERMINÉ") color = "#198754";
+  return `<span class="badge" style="background:${color}">${statut}</span>`;
+}
+
+function driveDownloadLink(url) {
+  if (!url) return "";
+  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (match && match[1]) {
+    return `https://drive.google.com/uc?export=download&id=${match[1]}`;
+  }
+  return url;
+}
+
+async function loadClientById(id) {
+  if (!id) return;
+  tbody.innerHTML = "";
+  loading.style.display = "inline";
+  currentClientId = id;
+
+  try {
+    const res = await fetch(`${endpoint}?id=${encodeURIComponent(id)}`);
+    const data = await res.json();
+
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="7">❌ Aucun dossier trouvé.</td></tr>`;
+      return;
+    }
+
+    data.forEach(client => {
+      currentClientName = client["Nom & Prénom"] || "Client";
+      currentStatut = client.statut || "EN ATTENTE";
+
+      let actionHTML = `<span class="download-btn wait">⏳ En attente</span>`;
+
+      if (client.lien && currentStatut === "TERMINÉ") {
+        actionHTML = `
+          <a href="${driveDownloadLink(client.lien)}"
+             target="_blank"
+             class="download-btn blink">
+             📥 Télécharger
+          </a>`;
+      }
+
+      tbody.innerHTML += `
+        <tr>
+          <td>${client["Adresse e-mail"] || ""}</td>
+          <td>${client["Nom & Prénom"] || ""}</td>
+          <td>${client["Numéro WhatsApp"] || ""}</td>
+          <td>${client["Dépôt de fichier"] || ""}</td>
+          <td>${client["Expliquez-nous le travail attendu"] || ""}</td>
+          <td>${getStatusBadge(currentStatut)}</td>
+          <td>${actionHTML}</td>
+        </tr>
+      `;
+    });
+
+    updateWhatsAppLink();
+
+  } catch (e) {
+    console.error(e);
+    tbody.innerHTML = `<tr><td colspan="7">⚠️ Erreur de chargement</td></tr>`;
+  } finally {
+    loading.style.display = "none";
+    idInput.value = "";
+  }
+}
+
+function updateWhatsAppLink() {
+  const message = `Bonjour Libert_Toi_AutoDi,
+Je suis ${currentClientName}.
+ID client : ${currentClientId}.
+Statut : ${currentStatut}.
+Merci de me contacter.`;
+
+  whatsappBtn.href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+}
+
+searchBtn.addEventListener("click", () => {
+  loadClientById(idInput.value.trim());
+});
+</script>
+
+</body>
+</html>
