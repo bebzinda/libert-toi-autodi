@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Outils | Libert_Toi_AutoDi</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Favicon + logo -->
+<link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="apple-touch-icon" href="images/logo.png">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body {
+  margin:0;
+  font-family:'Segoe UI', Arial, sans-serif;
+  background:#f5f7fa;
+  color:#333;
+}
+
+/* ===== Header ===== */
+header {
+  background: linear-gradient(135deg, #1e90ff, #0b5ed7);
+  color:white;
+  padding:50px 20px;
+  text-align:center;
+  overflow:hidden;
+}
+header img { height:70px; margin-bottom:10px; }
+header h1 { font-size:2.2rem; margin:10px 0; }
+header p { font-size:1.1rem; }
+
+/* ===== Navigation ===== */
+nav {
+  background:#fff;
+  display:flex;
+  justify-content:center;
+  gap:20px;
+  padding:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,.1);
+}
+nav a {
+  text-decoration:none;
+  color:#1e90ff;
+  font-weight:bold;
+}
+nav a:hover { text-decoration:underline; }
+
+/* ===== Section ===== */
+section {
+  padding:50px 20px;
+  max-width:1100px;
+  margin:auto;
+}
+section h2 {
+  text-align:center;
+  color:#1e90ff;
+  margin-bottom:35px;
+}
+
+/* ===== Cartes ===== */
+.cards {
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+  gap:25px;
+}
+.card {
+  background:white;
+  padding:25px;
+  border-radius:15px;
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+  opacity:0;
+  transform: translateY(30px);
+  transition:.5s;
+}
+.card.show { opacity:1; transform: translateY(0); }
+.card:hover { transform: translateY(-10px) scale(1.03); box-shadow:0 18px 40px rgba(0,0,0,.2); }
+
+.card i { font-size:40px; color:#1e90ff; margin-bottom:12px; }
+
+.actions {
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+}
+.actions a {
+  flex:1;
+  text-align:center;
+  padding:10px;
+  border-radius:6px;
+  text-decoration:none;
+  font-weight:bold;
+}
+.btn-order { background:#1e90ff; color:white; }
+.btn-order:hover { background:#0b78e3; }
+.btn-info { background:#e9ecef; color:#333; }
+.btn-info:hover { background:#d6d6d6; }
+
+/* Social + commentaires */
+.social { display:flex; gap:15px; margin-top:12px; }
+.comment-form { display:none; margin-top:10px; }
+.comment-form input { width:80%; padding:8px; }
+.comments-list { margin-top:10px; font-size:0.9rem; }
+.comment-item { background:#f0f0f0; padding:6px; border-radius:6px; margin-bottom:5px; }
+
+/* ===== CTA ===== */
+.cta {
+  background:#1e90ff;
+  color:white;
+  text-align:center;
+  padding:40px 20px;
+  border-radius:15px;
+  margin-top:40px;
+}
+.cta a {
+  background:white;
+  color:#1e90ff;
+  padding:12px 25px;
+  border-radius:30px;
+  text-decoration:none;
+  font-weight:bold;
+}
+.cta a:hover { box-shadow:0 8px 20px rgba(0,0,0,.3); transform:scale(1.1); }
+
+/* ===== Footer ===== */
+footer {
+  background:#222;
+  color:#ccc;
+  text-align:center;
+  padding:20px;
+  margin-top:40px;
+}
+
+/* ===== WhatsApp flottant ===== */
+.whatsapp {
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#25d366;
+  color:white;
+  padding:14px 18px;
+  border-radius:50px;
+  text-decoration:none;
+  font-weight:bold;
+  box-shadow:0 8px 20px rgba(0,0,0,.3);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html"><img src="images/logo.png" alt="Libert_Toi_AutoDi"></a>
+  <h1>Nos Outils Numériques</h1>
+  <p>Téléchargez des outils pratiques pour gagner du temps</p>
+</header>
+
+<nav>
+  <a href="index.html">Accueil</a>
+  <a href="formations.html">Formations</a>
+  <a href="outils.html">Outils</a>
+  <a href="espace-client.html">Espace Client</a>
+</nav>
+
+<section>
+<h2>🧰 Outils disponibles</h2>
+<div class="cards">
+
+<div class="card">
+  <i class="fas fa-file-excel"></i>
+  <h3>Gestion des dépenses (Excel)</h3>
+  <p>Suivi automatique des dépenses quotidiennes.</p>
+  <div class="actions">
+    <a href="#" class="btn-order" onclick="commander('Gestion des dépenses Excel')">🛒 Commander</a>
+    <a href="https://wa.me/22665219538" class="btn-info" target="_blank">💬 Infos</a>
+  </div>
+  <div class="social">
+    <span onclick="likeOutil(this)">👍 <span class="like-count">0</span></span>
+    <span onclick="toggleCommentForm(this)">💬 <span class="comment-count">0</span></span>
+  </div>
+  <div class="comment-form">
+    <input type="text" class="comment-input" placeholder="Votre commentaire">
+    <button onclick="submitComment(this)">Envoyer</button>
+    <div class="comments-list"></div>
+  </div>
+</div>
+
+<div class="card">
+  <i class="fas fa-chart-line"></i>
+  <h3>Suivi d’activité & rendement</h3>
+  <p>Analyse de performance et productivité.</p>
+  <div class="actions">
+    <a href="#" class="btn-order" onclick="commander('Suivi activité & rendement')">🛒 Commander</a>
+    <a href="https://wa.me/22665219538" class="btn-info" target="_blank">💬 Infos</a>
+  </div>
+  <div class="social">
+    <span onclick="likeOutil(this)">👍 <span class="like-count">0</span></span>
+    <span onclick="toggleCommentForm(this)">💬 <span class="comment-count">0</span></span>
+  </div>
+  <div class="comment-form">
+    <input type="text" class="comment-input" placeholder="Votre commentaire">
+    <button onclick="submitComment(this)">Envoyer</button>
+    <div class="comments-list"></div>
+  </div>
+</div>
+
+<div class="card">
+  <i class="fas fa-file-word"></i>
+  <h3>Modèle de rapport Word</h3>
+  <p>Rapport professionnel prêt à remplir.</p>
+  <div class="actions">
+    <a href="#" class="btn-order" onclick="commander('Modèle rapport Word')">🛒 Commander</a>
+    <a href="https://wa.me/22665219538" class="btn-info" target="_blank">💬 Infos</a>
+  </div>
+  <div class="social">
+    <span onclick="likeOutil(this)">👍 <span class="like-count">0</span></span>
+    <span onclick="toggleCommentForm(this)">💬 <span class="comment-count">0</span></span>
+  </div>
+  <div class="comment-form">
+    <input type="text" class="comment-input" placeholder="Votre commentaire">
+    <button onclick="submitComment(this)">Envoyer</button>
+    <div class="comments-list"></div>
+  </div>
+</div>
+
+</div>
+</section>
+
+<section class="cta">
+  <h2>📞 Besoin d’un outil sur mesure ?</h2>
+  <a href="https://wa.me/22665219538" target="_blank">Nous contacter</a>
+</section>
+
+<footer>
+<p>© 2026 Libert_Toi_AutoDi</p>
+</footer>
+
+<a class="whatsapp" href="https://wa.me/22665219538" target="_blank">💬 WhatsApp</a>
+
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbxKymOFmez4Oz6opGEPo909UWvkQh8EcVmKpB456FTuF64L3fIVSlBntz1a0ID78N0/exec";
+
+// COMMANDE
+function commander(outil) {
+  const nom = prompt("Votre nom complet :");
+  if(!nom) return;
+  const email = prompt("Votre email :");
+  if(!email) return;
+  const whatsapp = prompt("Votre numéro WhatsApp :");
+  if(!whatsapp) return;
+
+  alert("✅ Commande reçue !\n\nOutil : " + outil + "\nNom : " + nom + "\n\n📩 Traitement en cours");
+
+  const url = `${ENDPOINT}?action=creer&outil=${encodeURIComponent(outil)}&nom=${encodeURIComponent(nom)}&email=${encodeURIComponent(email)}&whatsapp=${encodeURIComponent(whatsapp)}`;
+  fetch(url).catch(()=>{});
+
+  setTimeout(()=>{ window.open(`https://wa.me/22665219538?text=Nouvelle commande : ${outil}`, "_blank"); }, 500);
+}
+
+// SOCIAL
+function likeOutil(el) { el.querySelector(".like-count").textContent++; }
+function toggleCommentForm(el) {
+  const form = el.closest(".card").querySelector(".comment-form");
+  form.style.display = form.style.display==="block"?"none":"block";
+}
+function submitComment(btn){
+  const card = btn.closest(".card");
+  const input = card.querySelector(".comment-input");
+  if(!input.value) return;
+  const div = document.createElement("div");
+  div.className="comment-item";
+  div.textContent = input.value;
+  card.querySelector(".comments-list").prepend(div);
+  card.querySelector(".comment-count").textContent++;
+  input.value="";
+}
+
+// Animation cartes
+window.addEventListener("load", ()=>{
+  document.querySelectorAll(".card").forEach((card,i)=>{
+    setTimeout(()=>card.classList.add("show"), i*200);
+  });
+});
+</script>
+
+</body>
+</html>
