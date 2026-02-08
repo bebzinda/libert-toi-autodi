@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Libert_Toi_AutoDi | Espace Client</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- FAVICON & PWA -->
+<link rel="icon" type="image/png" href="images/favicon.png">
+<link rel="apple-touch-icon" href="images/logo.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1e90ff">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+body{margin:0;font-family:'Segoe UI',Arial,sans-serif;background:#f5f7fa;color:#333}
+
+/* OFFLINE */
+#offline-banner{
+display:none;position:fixed;top:-50px;left:0;width:100%;
+background:#ff4d4f;color:#fff;text-align:center;
+padding:12px;font-weight:bold;z-index:9999;
+transition:top .4s}
+#offline-banner.show{top:0}
+
+/* HEADER */
+header{
+background:linear-gradient(135deg,#1e90ff,#0b5ed7);
+color:#fff;padding:40px 20px;text-align:center}
+header img{height:70px;margin-bottom:10px}
+
+/* NAV */
+nav{
+background:#fff;display:flex;justify-content:center;
+gap:20px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.1)}
+nav a{text-decoration:none;color:#1e90ff;font-weight:bold}
+
+/* SECTION */
+section{padding:50px 20px;max-width:1200px;margin:auto}
+
+/* BUTTONS */
+.btn-primary{
+padding:12px 20px;background:#1e90ff;color:#fff;
+border-radius:8px;text-decoration:none;font-weight:bold;border:none}
+.btn-primary:hover{background:#0b78e3}
+
+/* TABLE */
+.table-container{overflow-x:auto;margin-top:25px}
+table{
+width:100%;min-width:900px;border-collapse:collapse;
+background:#fff;box-shadow:0 10px 25px rgba(0,0,0,.08);
+border-radius:12px;overflow:hidden}
+th,td{padding:14px;border-bottom:1px solid #eee;text-align:left}
+th{background:#1e90ff;color:#fff}
+tr:nth-child(even){background:#f9fbff}
+
+/* Center specific columns */
+td.center{text-align:center}
+
+/* BADGES */
+.badge{padding:6px 12px;border-radius:20px;color:#fff;font-weight:bold;font-size:.85rem}
+.download-btn{padding:10px 15px;border-radius:8px;color:#fff;font-weight:bold;text-decoration:none}
+.wait{background:#ffc107;color:#333}
+.ok{background:#198754}
+.blink{animation:blink 1s infinite}
+@keyframes blink{50%{opacity:.5}}
+
+/* FOOTER */
+footer{background:#222;color:#ccc;text-align:center;padding:20px;margin-top:40px}
+
+/* WHATSAPP */
+.whatsapp{
+position:fixed;bottom:20px;right:20px;
+background:#25d366;color:#fff;padding:14px 18px;
+border-radius:50px;text-decoration:none;font-weight:bold;
+display:none}
+</style>
+</head>
+
+<body>
+
+<div id="offline-banner">⚠️ Veuillez activer votre connexion Internet</div>
+
+<header>
+<a href="index.html"><img src="images/logo.png" alt="Libert_Toi_AutoDi"></a>
+<h1>Espace Client</h1>
+<p>Suivi et téléchargement de vos fichiers</p>
+</header>
+
+<nav>
+<a href="index.html">Accueil</a>
+<a href="formations.html">Formations</a>
+<a href="outils.html">Outils</a>
+</nav>
+
+<section>
+
+<p>
+<a class="btn-primary" target="_blank"
+href="https://docs.google.com/forms/d/e/1FAIpQLSepncg1m0RuqcmdturorHndSvCw12o9JmwFRxHvU8h4gf77GQ/viewform">
+📤 Déposer un fichier
+</a>
+</p>
+
+<p>
+<input id="idInput" type="password" placeholder="Entrez votre ID client"
+style="padding:10px;border-radius:6px;border:1px solid #ccc;width:260px">
+<button id="searchBtn" class="btn-primary">Rechercher</button>
+<span id="loading" style="display:none;margin-left:10px">Chargement...</span>
+</p>
+
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Email</th>
+<th>Nom & Prénom</th>
+<th>WhatsApp</th>
+<th>Fichier</th>
+<th>Description</th>
+<th>Statut</th>
+<th id="actionHeader">Action</th>
+</tr>
+</thead>
+<tbody id="clientInfo"></tbody>
+</table>
+</div>
+
+</section>
+
+<footer>
+<p>© 2026 Libert_Toi_AutoDi</p>
+</footer>
+
+<a id="whatsappBtn" class="whatsapp" target="_blank">💬 WhatsApp</a>
+
+<script>
+const endpoint="https://script.google.com/macros/s/AKfycbzXevM8sL5MkzzyOt2HGYAW0LtIWqV9tSp3oPIVKCSHhkpG5cPuW859HhrZsSVTxP0/exec";
+const whatsappNumber="22665219538";
+
+const tbody=document.getElementById("clientInfo");
+const idInput=document.getElementById("idInput");
+const loading=document.getElementById("loading");
+const whatsappBtn=document.getElementById("whatsappBtn");
+const actionHeader=document.getElementById("actionHeader");
+
+// Masquer Action par défaut
+actionHeader.style.display="none";
+
+function badge(st){
+  st = (st || "").toUpperCase().trim();
+  let c = "#6c757d"; // Gris par défaut
+  if(st === "TERMINE") return `<span class="badge" style="background:${c}">${st}</span>`;
+  return `<span class="badge">${st}</span>`;
+}
+
+function drive(url){
+  const m=url?.match(/\/d\/([^/]+)/);
+  return m?`https://drive.google.com/uc?export=download&id=${m[1]}`:url;
+}
+
+async function loadClient(id=""){
+  tbody.innerHTML="";
+  loading.style.display="inline";
+
+  const url=id?`${endpoint}?id=${encodeURIComponent(id)}`:endpoint;
+
+  try{
+    const res=await fetch(url);
+    const data=await res.json();
+
+    if(!data.length){
+      tbody.innerHTML=`<tr><td colspan="7">❌ Aucun dossier</td></tr>`;
+      return;
+    }
+
+    // Si ID fourni, afficher Action
+    const showAction = !!id;
+    actionHeader.style.display = showAction ? "" : "none";
+
+    data.forEach(c => {
+      const statut = (c.statut || "EN ATTENTE").toUpperCase().trim();
+      const whatsapp = id ? (c["Numéro WhatsApp"] || "") : "*****";
+
+      // Action seulement si ID et TERMINE
+      let action = `<span class="download-btn wait">⏳ En attente</span>`;
+      if(showAction && c.lien && statut === "TERMINE"){
+        action = `<a class="download-btn ok blink" target="_blank" href="${drive(c.lien)}">📥 Télécharger</a>`;
+      }
+
+      // Statut avec couleur uniquement si TERMINE
+      const statutHTML = badge(statut);
+
+      // Fichier cliquable uniquement si ID
+      const fichierHTML = showAction && c.lien 
+        ? `<a href="${drive(c.lien)}" target="_blank">${c.fichier || "📎 Fichier joint"}</a>`
+        : (c.fichier || "📎 Fichier joint");
+
+      tbody.innerHTML += `
+        <tr>
+          <td>${c["Adresse e-mail"] || ""}</td>
+          <td>${c["Nom & Prénom"] || ""}</td>
+          <td>${whatsapp}</td>
+          <td class="center">${fichierHTML}</td>
+          <td>${c["Expliquez-nous le travail attendu"] || ""}</td>
+          <td class="center">${statutHTML}</td>
+          <td class="center">${showAction ? action : ""}</td>
+        </tr>`;
+    });
+
+    whatsappBtn.style.display=id?"block":"none";
+    if(id){
+      whatsappBtn.href=`https://wa.me/${whatsappNumber}?text=Bonjour, mon ID est ${id}`;
+    }
+
+  }catch(e){
+    tbody.innerHTML=`<tr><td colspan="7">⚠️ Erreur</td></tr>`;
+  }finally{
+    loading.style.display="none";
+  }
+}
+
+document.getElementById("searchBtn").onclick=()=>{
+  const id=idInput.value.trim();
+  if(!id) return alert("Veuillez saisir votre ID client");
+  loadClient(id);
+};
+
+window.addEventListener("load",()=>{
+  const p=new URLSearchParams(location.search);
+  const id=p.get("id");
+  id?idInput.value=id&&loadClient(id):loadClient();
+});
+
+const banner=document.getElementById("offline-banner");
+function online(){navigator.onLine?banner.classList.remove("show"):banner.classList.add("show")}
+window.addEventListener("online",online);
+window.addEventListener("offline",online);
+online();
+</script>
+
+</body>
+</html>
